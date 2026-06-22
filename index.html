@@ -1,0 +1,51 @@
+# 🤠 Howdy Texas!
+
+Live reis-app voor jullie Texas roadtrip — tijdlijn, polls, scorebord en pushmeldingen.
+
+## Deployen op Vercel (gratis, 5 minuten)
+
+### Stap 1 — GitHub
+1. Ga naar [github.com](https://github.com) en log in (of maak gratis account)
+2. Klik op **"New repository"**
+3. Geef het de naam `howdy-texas`, zet op **Public**, klik **Create**
+4. Upload alle bestanden uit deze map via **"uploading an existing file"**
+
+### Stap 2 — Vercel
+1. Ga naar [vercel.com](https://vercel.com) en log in met je GitHub account
+2. Klik **"Add New Project"**
+3. Kies je `howdy-texas` repository
+4. Klik **Deploy** — klaar! ✅
+
+Je krijgt een gratis URL zoals `howdy-texas.vercel.app`
+
+### Stap 3 — Link sturen
+Stuur de Vercel-URL naar al je vrienden en familie.
+Ze openen hem in de browser, kiezen hun naam en taal, en doen mee!
+
+### Pushmeldingen
+- Werken automatisch zodra de app gedeployed is
+- Vrienden klikken op **"Inschrijven"** in de Info-tab
+- Jij maakt een poll of stop aan → zij krijgen een melding op hun telefoon
+
+### App installeren (optioneel)
+- **Android**: Chrome-menu → "Toevoegen aan startscherm"
+- **iPhone**: Safari → Deel-knop → "Zet op beginscherm"
+
+## Bestanden
+
+| Bestand | Wat het doet |
+|---------|-------------|
+| `index.html` | De volledige app |
+| `sw.js` | Service worker voor pushmeldingen & offline |
+| `manifest.json` | PWA-instellingen (naam, icoon, kleur) |
+| `vercel.json` | Vercel routing configuratie |
+| `icon-192.png` | App icoon (192×192) |
+| `icon-512.png` | App icoon (512×512) |
+
+## Aanpassen
+
+### Eigen naam/URL instellen
+Open `index.html` en zoek naar `howdy-texas.app/onze-trip` — vervang door je eigen Vercel-URL.
+
+### Stops vooraf invullen
+Zoek in `index.html` naar `state = JSON.parse(...)` en pas de `stops` array aan met jullie echte steden en datums.
