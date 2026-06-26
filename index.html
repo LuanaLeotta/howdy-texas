@@ -1,51 +1,1037 @@
-# 🤠 Howdy Texas!
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>J★L — Howdy Texas!</title>
+  <meta name="description" content="Volg onze Texas roadtrip live, stem mee en win punten!" />
+  <meta name="theme-color" content="#C0272D" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="J★L Texas" />
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="apple-touch-icon" href="/icon-192.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Lora:ital,wght@0,400;0,600;1,400;1,600&family=Caveat:wght@400;600;700&display=swap" rel="stylesheet">
 
-Live reis-app voor jullie Texas roadtrip — tijdlijn, polls, scorebord en pushmeldingen.
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; background: #F5F0E8; font-family: 'Lora', Georgia, serif; color: #1B2A4A; }
 
-## Deployen op Vercel (gratis, 5 minuten)
+    /* ── ONBOARDING ── */
+    #onboard {
+      position: fixed; inset: 0; background: #F5F0E8;
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; padding: 28px; z-index: 200;
+    }
+    .ob-logo { font-size: 52px; margin-bottom: 10px; }
+    .ob-title { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 900; color: #1B2A4A; text-align: center; }
+    .ob-sub { font-family: 'Caveat', cursive; font-size: 16px; color: #C0272D; margin-top: 8px; text-align: center; line-height: 1.8; margin-bottom: 24px; }
+    .ob-langs { display: flex; gap: 10px; width: 100%; max-width: 400px; margin-bottom: 18px; }
+    .ob-lang-btn { flex: 1; padding: 12px; background: #fff; border: 2px solid #c0c8d8; border-radius: 4px; color: #5a6a7a; font-size: 14px; cursor: pointer; font-family: 'Lora', serif; transition: all 0.15s; }
+    .ob-lang-btn.active { background: #1B2A4A; border-color: #1B2A4A; color: #F5F0E8; font-weight: 700; }
+    .ob-label { font-family: 'Caveat', cursive; font-size: 14px; color: #C0272D; margin-bottom: 6px; width: 100%; max-width: 400px; }
+    .ob-input { width: 100%; max-width: 400px; padding: 12px 16px; font-size: 18px; background: #fff; border: 2px solid #1B2A4A; border-radius: 4px; color: #1B2A4A; margin-bottom: 14px; text-align: center; outline: none; font-family: 'Caveat', cursive; }
+    .ob-btn { width: 100%; max-width: 400px; padding: 14px; background: #C0272D; color: #fff; border: none; border-radius: 4px; font-size: 18px; font-weight: 700; cursor: pointer; font-family: 'Playfair Display', serif; }
+    .ob-btn:hover { background: #a01f24; }
 
-### Stap 1 — GitHub
-1. Ga naar [github.com](https://github.com) en log in (of maak gratis account)
-2. Klik op **"New repository"**
-3. Geef het de naam `howdy-texas`, zet op **Public**, klik **Create**
-4. Upload alle bestanden uit deze map via **"uploading an existing file"**
+    /* ── MAIN ── */
+    #main-app { display: none; flex-direction: column; min-height: 100vh; }
 
-### Stap 2 — Vercel
-1. Ga naar [vercel.com](https://vercel.com) en log in met je GitHub account
-2. Klik **"Add New Project"**
-3. Kies je `howdy-texas` repository
-4. Klik **Deploy** — klaar! ✅
+    .topbar { background: #1B2A4A; padding: 10px 14px; display: flex; align-items: center; gap: 8px; border-bottom: 3px solid #C0272D; }
+    .topbar-title { flex: 1; }
+    .topbar-main { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 900; color: #F5F0E8; }
+    .topbar-sub { font-family: 'Caveat', cursive; font-size: 13px; color: #a0b0c8; margin-top: 1px; }
+    .user-pill { background: #2a3d5e; border: 1.5px solid #a0b0c8; border-radius: 99px; padding: 4px 10px; font-size: 12px; color: #F5F0E8; font-family: 'Lora', serif; }
+    .lang-toggle { display: flex; background: #0d1f38; border-radius: 99px; border: 1.5px solid #a0b0c8; overflow: hidden; margin-left: 6px; }
+    .lang-btn { padding: 4px 10px; font-size: 11px; font-weight: 700; color: #a0b0c8; background: transparent; border: none; cursor: pointer; font-family: 'Lora', serif; }
+    .lang-btn.active { background: #F5F0E8; color: #1B2A4A; }
 
-Je krijgt een gratis URL zoals `howdy-texas.vercel.app`
+    .tabs { background: #1B2A4A; display: flex; border-bottom: 3px solid #C0272D; }
+    .tab { flex: 1; padding: 8px 2px; text-align: center; font-size: 9px; color: #a0b0c8; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -3px; font-family: 'Lora', serif; transition: all 0.15s; }
+    .tab.active { color: #F5F0E8; border-bottom: 3px solid #F5F0E8; }
+    .tab-icon { font-size: 15px; margin-bottom: 2px; }
 
-### Stap 3 — Link sturen
-Stuur de Vercel-URL naar al je vrienden en familie.
-Ze openen hem in de browser, kiezen hun naam en taal, en doen mee!
+    .section { display: none; padding: 12px; }
+    .section.active { display: block; }
 
-### Pushmeldingen
-- Werken automatisch zodra de app gedeployed is
-- Vrienden klikken op **"Inschrijven"** in de Info-tab
-- Jij maakt een poll of stop aan → zij krijgen een melding op hun telefoon
+    /* ── KAARTEN ── */
+    .card { background: #fffdf7; border: 1px solid #e8e0cc; border-radius: 3px; padding: 14px; margin-bottom: 12px; box-shadow: 1px 2px 8px rgba(0,0,0,0.05); }
 
-### App installeren (optioneel)
-- **Android**: Chrome-menu → "Toevoegen aan startscherm"
-- **iPhone**: Safari → Deel-knop → "Zet op beginscherm"
+    /* ── KNOPPEN ── */
+    .btn-navy { width: 100%; padding: 12px; background: #1B2A4A; border: none; border-radius: 4px; color: #F5F0E8; font-size: 14px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-family: 'Playfair Display', serif; margin-bottom: 14px; transition: background 0.15s; }
+    .btn-navy:hover { background: #243860; }
+    .btn-red { padding: 9px; background: #C0272D; color: #fff; border: none; border-radius: 4px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: 'Playfair Display', serif; transition: background 0.15s; }
+    .btn-red:hover { background: #a01f24; }
+    .btn-ghost { padding: 9px 16px; background: #f0f3f8; color: #5a6a7a; border: 1px solid #c0c8d8; border-radius: 4px; font-size: 13px; cursor: pointer; font-family: 'Lora', serif; }
 
-## Bestanden
+    /* ── FORMULIEREN ── */
+    .form-box { background: #fffdf7; border: 2px solid #C0272D; border-radius: 3px; padding: 16px; margin-bottom: 14px; }
+    .fl { font-family: 'Caveat', cursive; font-size: 14px; color: #C0272D; margin-bottom: 4px; }
+    .wi { width: 100%; padding: 8px; font-size: 14px; background: transparent; border: none; border-bottom: 1.5px solid #c0c8d8; color: #1B2A4A; margin-bottom: 10px; outline: none; font-family: 'Lora', serif; }
+    .wi:focus { border-bottom-color: #C0272D; }
+    .wi::placeholder { color: #c0c8d8; }
+    textarea.wi { resize: none; line-height: 1.7; font-style: italic; }
 
-| Bestand | Wat het doet |
-|---------|-------------|
-| `index.html` | De volledige app |
-| `sw.js` | Service worker voor pushmeldingen & offline |
-| `manifest.json` | PWA-instellingen (naam, icoon, kleur) |
-| `vercel.json` | Vercel routing configuratie |
-| `icon-192.png` | App icoon (192×192) |
-| `icon-512.png` | App icoon (512×512) |
+    /* ── DAGBOEK / TIJDLIJN ── */
+    .diary-card { background: #fffdf7; border: 1px solid #e8e0cc; border-radius: 3px; padding: 16px; margin-bottom: 18px; position: relative; box-shadow: 1px 2px 8px rgba(0,0,0,0.06); }
+    .diary-card::before { content: ''; position: absolute; left: 36px; top: 0; bottom: 0; width: 1px; background: rgba(192,39,45,0.25); }
+    .diary-inner { padding-left: 20px; }
+    .diary-date { font-family: 'Caveat', cursive; font-size: 14px; color: #C0272D; margin-bottom: 4px; font-weight: 600; }
+    .diary-city { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 900; color: #1B2A4A; margin-bottom: 8px; }
+    .diary-text { font-family: 'Lora', serif; font-size: 13px; color: #3a4050; line-height: 1.8; font-style: italic; margin-bottom: 12px; }
+    .diary-badge { display: inline-block; font-family: 'Caveat', cursive; font-size: 13px; padding: 2px 10px; border-radius: 99px; margin-bottom: 12px; }
+    .diary-badge.visited { background: #e8f5ee; color: #2a7a4a; border: 1px solid #2a7a4a; }
+    .diary-badge.current { background: #fdf0f0; color: #C0272D; border: 1px solid #C0272D; }
+    .diary-badge.planned { background: #f0f3f8; color: #5a6a7a; border: 1px dashed #c0c8d8; }
 
-## Aanpassen
+    .tl-spine { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; width: 18px; margin-top: 22px; }
+    .tl-dot { width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0; border: 2px solid #c0c8d8; background: #e8edf5; }
+    .tl-dot.visited { background: #2a7a4a; border-color: #2a7a4a; }
+    .tl-dot.current { background: #C0272D; border-color: #C0272D; box-shadow: 0 0 0 4px rgba(192,39,45,0.15); }
+    .tl-dot.planned { background: #f5f0e8; border-color: #c0c8d8; border-style: dashed; }
+    .tl-line { flex: 1; width: 2px; background: #dde3ec; min-height: 20px; margin-top: 3px; }
+    .tl-line.visited { background: #2a7a4a; }
 
-### Eigen naam/URL instellen
-Open `index.html` en zoek naar `howdy-texas.app/onze-trip` — vervang door je eigen Vercel-URL.
+    /* ── CAROUSEL ── */
+    .carousel-wrap { position: relative; margin-bottom: 10px; user-select: none; }
+    .carousel-track-outer { overflow: hidden; border-radius: 2px; }
+    .carousel-track { display: flex; transition: transform 0.35s cubic-bezier(.4,0,.2,1); }
+    .carousel-slide { flex-shrink: 0; width: 100%; }
+    .carousel-polaroid { background: #fff; padding: 8px 8px 36px; box-shadow: 2px 4px 14px rgba(0,0,0,0.13); position: relative; margin: 0 2px; }
+    .carousel-polaroid img { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; }
+    .carousel-caption { position: absolute; bottom: 7px; left: 8px; right: 8px; font-family: 'Caveat', cursive; font-size: 16px; color: #2a2a2a; text-align: center; }
+    .carousel-empty { background: #fff; padding: 8px 8px 36px; margin: 0 2px; box-shadow: 2px 4px 14px rgba(0,0,0,0.13); }
+    .carousel-add { aspect-ratio: 4/3; border: 2px dashed #c0c8d8; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; cursor: pointer; background: #f5f7fa; color: #5a6a7a; font-family: 'Caveat', cursive; font-size: 15px; transition: background 0.15s; }
+    .carousel-add:hover { background: #e8edf5; }
+    .carousel-btn { position: absolute; top: 50%; transform: translateY(-70%); width: 32px; height: 32px; border-radius: 50%; background: rgba(27,42,74,0.85); color: #F5E6C8; border: none; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 10; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+    .carousel-btn:hover { background: #C0272D; }
+    .carousel-btn.prev { left: 6px; }
+    .carousel-btn.next { right: 6px; }
+    .carousel-btn:disabled { opacity: 0.3; cursor: default; }
+    .carousel-dots { display: flex; justify-content: center; gap: 6px; margin-top: 8px; }
+    .carousel-dot { width: 7px; height: 7px; border-radius: 50%; background: #c0c8d8; cursor: pointer; transition: background 0.2s, transform 0.2s; border: none; }
+    .carousel-dot.active { background: #C0272D; transform: scale(1.3); }
+    .carousel-counter { position: absolute; top: 12px; right: 14px; background: rgba(27,42,74,0.75); color: #F5E6C8; font-family: 'Caveat', cursive; font-size: 13px; padding: 2px 9px; border-radius: 99px; z-index: 10; }
 
-### Stops vooraf invullen
-Zoek in `index.html` naar `state = JSON.parse(...)` en pas de `stops` array aan met jullie echte steden en datums.
+    /* ── REACTIES ── */
+    .postit-yellow { background: #FFF176; }
+    .postit-pink   { background: #F8BBD9; }
+    .postit-blue   { background: #B3E5FC; }
+    .postit-green  { background: #C8E6C9; }
+    .postit-orange { background: #FFE0B2; }
+    .reaction-postit { padding: 8px 10px 6px; border-radius: 2px; box-shadow: 2px 3px 8px rgba(0,0,0,0.15); font-family: 'Caveat', cursive; font-size: 13px; color: #2a2000; min-width: 80px; max-width: 110px; flex-shrink: 0; word-break: break-word; position: relative; }
+    .reaction-postit::before { content:''; position:absolute; top:0; left:0; right:0; height:5px; background:rgba(0,0,0,0.07); border-radius:2px 2px 0 0; }
+    .reaction-tape { padding: 8px 14px; font-family: 'Caveat', cursive; font-size: 13px; color: #3a3000; background: rgba(210,200,160,0.85); clip-path: polygon(2% 8%, 0% 50%, 3% 90%, 97% 100%, 100% 55%, 98% 5%); min-width: 90px; max-width: 130px; word-break: break-word; flex-shrink: 0; line-height: 1.4; }
+    .reaction-sticker { display: flex; flex-direction: column; align-items: center; gap: 2px; font-family: 'Caveat', cursive; font-size: 12px; color: #1B2A4A; max-width: 70px; text-align: center; flex-shrink: 0; word-break: break-word; }
+    .sticker-circle { width: 52px; height: 52px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 1px 2px 6px rgba(0,0,0,0.15); border: 2px solid rgba(255,255,255,0.8); }
+    .style-picker { display: flex; gap: 6px; margin-bottom: 10px; }
+    .style-opt { flex: 1; padding: 7px 4px; border-radius: 6px; border: 1.5px solid #c0c8d8; background: #f5f7fa; font-family: 'Caveat', cursive; font-size: 13px; color: #5a6a7a; cursor: pointer; text-align: center; transition: all 0.15s; }
+    .style-opt.selected { border-color: #C0272D; background: #fdf0f0; color: #C0272D; font-weight: 700; }
+    .emoji-picker { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+    .emoji-opt { width: 34px; height: 34px; border-radius: 50%; background: #f0f3f8; border: 2px solid transparent; display: flex; align-items: center; justify-content: center; font-size: 17px; cursor: pointer; transition: all 0.1s; }
+    .emoji-opt.selected { border-color: #C0272D; background: #fdf0f0; transform: scale(1.15); }
+    .react-btn { margin-top: 8px; padding: 5px 12px; background: #fffdf7; border: 1.5px solid #1B2A4A; border-radius: 99px; font-family: 'Caveat', cursive; font-size: 14px; color: #1B2A4A; cursor: pointer; }
+
+    /* ── POLLS ── */
+    .poll-card { background: #fffdf7; border: 1px solid #e8e0cc; border-radius: 3px; padding: 14px; margin-bottom: 12px; }
+    .poll-q { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 800; color: #1B2A4A; line-height: 1.4; padding-top: 6px; }
+    .poll-btn { width: 100%; padding: 10px 14px; text-align: left; background: #F5F0E8; border: 1.5px solid #1B2A4A; border-radius: 4px; font-size: 13px; color: #1B2A4A; cursor: pointer; display: flex; justify-content: space-between; align-items: center; position: relative; overflow: hidden; margin-bottom: 7px; font-family: 'Lora', serif; transition: background 0.15s; }
+    .poll-btn:hover:not(.voted) { background: #fdf0f0; border-color: #C0272D; }
+    .poll-btn.selected { border-color: #C0272D; border-width: 2px; }
+    .poll-btn.voted { cursor: default; }
+    .poll-bar { position: absolute; left:0; top:0; bottom:0; background: rgba(192,39,45,0.1); z-index:0; transition: width 0.4s; }
+    .poll-label { position: relative; z-index: 1; }
+    .poll-pct { font-size: 12px; color: #5a6a7a; position: relative; z-index: 1; font-weight: 600; }
+    .poll-pct.winner { color: #C0272D; font-weight: 700; }
+    .poll-timer { font-family: 'Caveat', cursive; font-size: 13px; color: #5a6a7a; margin-top: 8px; text-align: right; }
+    .poll-timer.urgent { color: #C0272D; font-weight: 700; }
+
+    /* ── SCORE & BADGES ── */
+    .score-hero { background: #1B2A4A; border-radius: 10px; padding: 16px; margin-bottom: 14px; color: #F5F0E8; text-align: center; }
+    .score-pts { font-family: 'Playfair Display', serif; font-size: 52px; font-weight: 900; color: #F5F0E8; line-height: 1; }
+    .score-rank-pill { display: inline-block; background: #C0272D; color: #fff; font-family: 'Caveat', cursive; font-size: 14px; padding: 3px 14px; border-radius: 99px; margin-top: 8px; }
+    .level-bar-bg { background: rgba(255,255,255,0.15); border-radius: 99px; height: 8px; overflow: hidden; margin: 10px 0 4px; }
+    .level-bar-fill { height: 8px; background: linear-gradient(90deg, #C0272D, #FFD700); border-radius: 99px; transition: width 0.5s; }
+    .rank-row { display: flex; align-items: center; gap: 10px; padding: 10px; border-radius: 8px; margin-bottom: 6px; background: #fff; border: 1px solid #e8e0cc; }
+    .rank-row.me { background: #fdf0f0; border-color: #C0272D; }
+    .rank-avatar { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; flex-shrink: 0; font-family: 'Caveat', cursive; color: #fff; }
+    .badge-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+    .badge-card { background: #fff; border: 1px solid #e8e0cc; border-radius: 10px; padding: 14px 12px; text-align: center; box-shadow: 1px 2px 8px rgba(0,0,0,0.06); position: relative; overflow: hidden; transition: transform 0.15s; }
+    .badge-card.earned { border-color: #C0272D; background: linear-gradient(135deg, #fffdf7 60%, #fdf0f0); }
+    .badge-card.locked { opacity: 0.45; filter: grayscale(60%); }
+    .badge-icon { font-size: 36px; margin-bottom: 6px; display: block; }
+    .badge-name { font-family: 'Playfair Display', serif; font-size: 13px; font-weight: 800; color: #1B2A4A; margin-bottom: 3px; }
+    .badge-desc { font-size: 11px; color: #5a6a7a; font-style: italic; line-height: 1.4; }
+    .badge-earned-tag { position: absolute; top: 8px; right: -18px; background: #C0272D; color: #fff; font-family: 'Caveat', cursive; font-size: 11px; padding: 2px 22px; transform: rotate(35deg); }
+    @keyframes pulse { from { transform: scale(1); } to { transform: scale(1.1); } }
+    .badge-new { position: absolute; top: 6px; left: 6px; background: #FFD700; color: #1B2A4A; font-family: 'Caveat', cursive; font-size: 11px; font-weight: 700; padding: 2px 7px; border-radius: 99px; animation: pulse 1s infinite alternate; }
+
+    /* ── TOAST ── */
+    .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #1B2A4A; color: #F5F0E8; font-family: 'Caveat', cursive; font-size: 16px; padding: 12px 20px; border-radius: 99px; box-shadow: 0 4px 20px rgba(0,0,0,0.25); z-index: 999; opacity: 0; transition: opacity 0.3s; white-space: nowrap; pointer-events: none; }
+    .toast.show { opacity: 1; }
+
+    /* ── PUSH BANNER ── */
+    .push-banner { background: #fdf0f0; border: 1.5px solid #C0272D; border-radius: 10px; padding: 12px 14px; margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+    .push-banner span { flex: 1; font-size: 13px; color: #1B2A4A; font-family: 'Lora', serif; line-height: 1.4; }
+
+    /* ── NOTIF LOG ── */
+    .notif-row { display: flex; align-items: flex-start; gap: 10px; padding: 10px 0; border-bottom: 1px dashed #e8e0cc; }
+    .notif-row:last-child { border-bottom: none; }
+    .notif-dot { width: 8px; height: 8px; border-radius: 50%; background: #C0272D; margin-top: 4px; flex-shrink: 0; }
+
+    /* ── STATUS KNOPPEN ── */
+    .status-btns { display: flex; gap: 6px; margin-bottom: 14px; }
+    .status-btn { flex: 1; padding: 7px; border-radius: 99px; font-size: 13px; cursor: pointer; font-family: 'Caveat', cursive; border: 1.5px solid; transition: all 0.15s; }
+    .status-btn.visited { background: #e8f5ee; border-color: #2a7a4a; color: #2a7a4a; }
+    .status-btn.current { background: #fdf0f0; border-color: #C0272D; color: #C0272D; font-weight: 800; }
+    .status-btn.planned { background: #f0f3f8; border-color: #c0c8d8; color: #5a6a7a; }
+    .status-btn.active-status { box-shadow: 0 0 0 2px rgba(0,0,0,0.2); font-weight: 800; }
+
+    .option-row { display: flex; gap: 6px; margin-bottom: 6px; }
+    .option-row .wi { margin-bottom: 0; flex: 1; }
+    .remove-opt { background: none; border: none; color: #C0272D; cursor: pointer; font-size: 18px; padding: 0 8px; }
+  </style>
+</head>
+<body>
+
+<div id="toast" class="toast"></div>
+
+<!-- ══ ONBOARDING ══ -->
+<div id="onboard">
+  <div class="ob-logo">🤠</div>
+  <div class="ob-title">J★L — Howdy Texas!</div>
+  <div class="ob-sub" id="ob-sub">
+    Volg onze roadtrip live, stem mee en win punten!<br>
+    Suis notre roadtrip, vote et gagne des points !
+  </div>
+  <div class="ob-langs">
+    <button class="ob-lang-btn active" id="ob-nl" onclick="obLang('nl')">🇧🇪 Nederlands</button>
+    <button class="ob-lang-btn" id="ob-fr" onclick="obLang('fr')">🇫🇷 Français</button>
+  </div>
+  <div class="ob-label" id="ob-label">Jouw naam</div>
+  <input class="ob-input" id="ob-name" maxlength="20" placeholder="bijv. Sofie..."
+    onkeydown="if(event.key==='Enter')completeOnboard()" />
+  <button class="ob-btn" id="ob-btn" onclick="completeOnboard()">➜ Laten we gaan!</button>
+</div>
+
+<!-- ══ MAIN APP ══ -->
+<div id="main-app">
+
+  <div class="topbar">
+    <div class="topbar-title">
+      <div class="topbar-main">🤠 J★L — Howdy Texas!</div>
+      <div class="topbar-sub" id="topbar-sub">Live vanuit Texas</div>
+    </div>
+    <div class="user-pill">👤 <span id="user-display">—</span></div>
+    <div class="lang-toggle">
+      <button class="lang-btn active" id="btn-nl" onclick="setLang('nl')">NL</button>
+      <button class="lang-btn" id="btn-fr" onclick="setLang('fr')">FR</button>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" id="t-reis" onclick="switchTab('reis',this)">
+      <div class="tab-icon">📖</div>
+      <span data-nl="Dagboek" data-fr="Journal">Dagboek</span>
+    </div>
+    <div class="tab" id="t-polls" onclick="switchTab('polls',this)">
+      <div class="tab-icon">📊</div>
+      <span data-nl="Stem" data-fr="Vote">Stem</span>
+    </div>
+    <div class="tab" id="t-score" onclick="switchTab('score',this)">
+      <div class="tab-icon">🏆</div>
+      <span data-nl="Score" data-fr="Score">Score</span>
+    </div>
+    <div class="tab" id="t-badges" onclick="switchTab('badges',this)">
+      <div class="tab-icon">🎖️</div>
+      <span data-nl="Badges" data-fr="Badges">Badges</span>
+    </div>
+    <div class="tab" id="t-info" onclick="switchTab('info',this)">
+      <div class="tab-icon">🔔</div>
+      <span data-nl="Info" data-fr="Info">Info</span>
+    </div>
+  </div>
+
+  <!-- DAGBOEK -->
+  <div class="section active" id="section-reis">
+    <button class="btn-navy" id="add-stop-btn" onclick="showAddStop()">
+      ＋ <span data-nl="Nieuwe pagina schrijven" data-fr="Écrire une nouvelle page">Nieuwe pagina schrijven</span>
+    </button>
+    <div class="form-box" id="add-stop-form" style="display:none;">
+      <div class="fl" data-nl="Stad / naam" data-fr="Ville / nom">Stad / naam</div>
+      <input class="wi" id="s-name" placeholder="bijv. Austin..." />
+      <div class="fl" data-nl="Datum" data-fr="Date">Datum</div>
+      <input class="wi" id="s-date" type="date" />
+      <div class="fl" data-nl="Beschrijving" data-fr="Description">Beschrijving</div>
+      <textarea class="wi" id="s-desc" rows="3" placeholder="Schrijf hier je verhaal..."></textarea>
+      <div class="fl" data-nl="Foto URL's (één per regel)" data-fr="URL photos (une par ligne)">Foto URL's (één per regel)</div>
+      <textarea class="wi" id="s-photos" rows="3" placeholder="https://i.imgur.com/..."></textarea>
+      <div class="fl" data-nl="Status" data-fr="Statut">Status</div>
+      <div class="status-btns">
+        <button class="status-btn visited" id="sb-v" onclick="selStatus('visited')">✓ <span data-nl="Bezocht" data-fr="Visité">Bezocht</span></button>
+        <button class="status-btn current active-status" id="sb-c" onclick="selStatus('current')">📍 <span data-nl="Nu hier" data-fr="Ici">Nu hier</span></button>
+        <button class="status-btn planned" id="sb-p" onclick="selStatus('planned')">⏳ <span data-nl="Gepland" data-fr="Prévu">Gepland</span></button>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button class="btn-ghost" onclick="hideAddStop()" data-nl="Annuleer" data-fr="Annuler">Annuleer</button>
+        <button class="btn-red" onclick="submitStop()" style="flex:1;" data-nl="➜ Toevoegen" data-fr="➜ Ajouter">➜ Toevoegen</button>
+      </div>
+    </div>
+    <div id="timeline"></div>
+  </div>
+
+  <!-- POLLS -->
+  <div class="section" id="section-polls">
+    <div id="polls-container"></div>
+    <button class="btn-navy" id="new-poll-btn" onclick="showCreatePoll()">
+      ＋ <span data-nl="Nieuwe poll aanmaken" data-fr="Créer un sondage">Nieuwe poll aanmaken</span>
+    </button>
+    <div class="form-box" id="create-poll-form" style="display:none;">
+      <div class="fl">Vraag NL</div>
+      <input class="wi" id="poll-q-nl" placeholder="Vraag in het Nederlands..." />
+      <div class="fl">Vraag FR</div>
+      <input class="wi" id="poll-q-fr" placeholder="Question en français..." />
+      <div class="fl" data-nl="Sluit over (uren, optioneel)" data-fr="Ferme dans (heures, optionnel)">Sluit over (uren)</div>
+      <input class="wi" id="poll-hours" type="number" min="1" max="72" placeholder="bijv. 24" />
+      <div class="fl" data-nl="Opties" data-fr="Options">Opties</div>
+      <div id="poll-opts">
+        <div class="option-row"><input class="wi poll-opt" placeholder="Optie 1..." /><button class="remove-opt" onclick="removeOpt(this)">×</button></div>
+        <div class="option-row"><input class="wi poll-opt" placeholder="Optie 2..." /><button class="remove-opt" onclick="removeOpt(this)">×</button></div>
+      </div>
+      <button class="btn-ghost" style="width:100%;margin:8px 0 10px;" onclick="addOptInput()">＋ <span data-nl="Optie toevoegen" data-fr="Ajouter option">Optie toevoegen</span></button>
+      <div style="display:flex;gap:8px;">
+        <button class="btn-ghost" onclick="hideCreatePoll()" data-nl="Annuleer" data-fr="Annuler">Annuleer</button>
+        <button class="btn-red" onclick="submitPoll()" style="flex:1;" data-nl="➜ Publiceren" data-fr="➜ Publier">➜ Publiceren</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCORE -->
+  <div class="section" id="section-score">
+    <div id="score-hero"></div>
+    <div class="card">
+      <div style="font-family:'Playfair Display',serif;font-size:16px;font-weight:900;color:#1B2A4A;margin-bottom:10px;">🏅 <span data-nl="Ranglijst" data-fr="Classement">Ranglijst</span></div>
+      <div id="scoreboard"></div>
+    </div>
+    <div class="card" style="font-size:12px;color:#5a6a7a;line-height:1.8;font-style:italic;">
+      <span data-nl="Goed geraden = +2 pt · Eerste stemmer = +1 · Reageren = +1" data-fr="Bon pronostic = +2 pt · Premier votant = +1 · Réagir = +1">Goed geraden = +2 pt · Eerste stemmer = +1 · Reageren = +1</span>
+    </div>
+  </div>
+
+  <!-- BADGES -->
+  <div class="section" id="section-badges">
+    <div style="font-family:'Playfair Display',serif;font-size:20px;font-weight:900;color:#1B2A4A;margin-bottom:4px;">🎖️ <span data-nl="Badges" data-fr="Badges">Badges</span></div>
+    <div style="font-family:'Caveat',cursive;font-size:14px;color:#5a6a7a;margin-bottom:14px;" id="badges-sub">Verdien badges door te spelen!</div>
+    <div class="badge-grid" id="badges-grid"></div>
+  </div>
+
+  <!-- INFO -->
+  <div class="section" id="section-info">
+    <div id="push-wrap">
+      <div class="push-banner">
+        <span style="font-size:22px;">🔔</span>
+        <span id="push-text" data-nl="Ontvang meldingen bij nieuwe stops en polls!" data-fr="Recevez des alertes pour les nouvelles étapes et sondages !">Ontvang meldingen bij nieuwe stops en polls!</span>
+        <button class="btn-red" id="push-btn" onclick="askPush()" style="white-space:nowrap;font-size:12px;padding:7px 12px;">
+          <span data-nl="Inschrijven" data-fr="S'abonner">Inschrijven</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="card" style="text-align:center;margin-bottom:12px;background:#1B2A4A;">
+      <div style="font-size:24px;margin-bottom:6px;">🔗</div>
+      <div style="font-family:'Playfair Display',serif;font-size:15px;font-weight:800;color:#F5F0E8;margin-bottom:8px;" data-nl="Stuur de link naar vrienden & familie" data-fr="Envoyez le lien à vos amis & famille">Stuur de link naar vrienden & familie</div>
+      <div style="background:#0d1f38;border-radius:4px;padding:8px 10px;display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;">
+        <span id="share-url" style="font-size:12px;color:#a0b0c8;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:'Lora',serif;"></span>
+        <button class="btn-red" onclick="copyLink(this)" style="font-size:12px;padding:6px 12px;white-space:nowrap;">📋 <span data-nl="Kopieer" data-fr="Copier">Kopieer</span></button>
+      </div>
+      <button class="btn-red" onclick="shareApp()" style="width:100%;font-size:13px;">
+        ↗ <span data-nl="Deel via WhatsApp / iMessage" data-fr="Partager via WhatsApp / iMessage">Deel via WhatsApp / iMessage</span>
+      </button>
+    </div>
+
+    <div class="card">
+      <div style="font-family:'Playfair Display',serif;font-size:15px;font-weight:800;color:#1B2A4A;margin-bottom:10px;">🔔 <span data-nl="Activiteiten log" data-fr="Journal d'activité">Activiteiten log</span></div>
+      <div id="notif-log">
+        <div class="notif-row">
+          <div class="notif-dot"></div>
+          <div>
+            <div style="font-size:13px;color:#1B2A4A;font-family:'Lora',serif;" data-nl="App gelanceerd! 🎉" data-fr="Application lancée ! 🎉">App gelanceerd! 🎉</div>
+            <div style="font-family:'Caveat',cursive;font-size:13px;color:#5a6a7a;">nu</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="font-size:12px;color:#5a6a7a;line-height:1.8;">
+      <div style="font-family:'Playfair Display',serif;font-size:15px;font-weight:800;color:#1B2A4A;margin-bottom:8px;">📱 <span data-nl="Als app installeren" data-fr="Installer comme appli">Als app installeren</span></div>
+      <span data-nl="Android: browsermenu → 'Toevoegen aan startscherm' • iPhone: Safari → Deel → 'Zet op beginscherm'" data-fr="Android: menu → 'Ajouter à l'écran d'accueil' • iPhone: Safari → Partager → 'Sur l'écran d'accueil'">
+        Android: browsermenu → 'Toevoegen aan startscherm' • iPhone: Safari → Deel → 'Zet op beginscherm'
+      </span>
+    </div>
+  </div>
+
+</div><!-- /main-app -->
+
+<!-- Firebase SDK -->
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+  import { getFirestore, doc, setDoc, onSnapshot, collection, getDocs } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+  // ══ FIREBASE CONFIG ══
+  // Vervang deze waarden met je eigen Firebase project config
+  // Ga naar: console.firebase.google.com → jouw project → Project settings → Web app
+  const firebaseConfig = {
+    apiKey: "JOUW_API_KEY",
+    authDomain: "JOUW_PROJECT.firebaseapp.com",
+    projectId: "JOUW_PROJECT_ID",
+    storageBucket: "JOUW_PROJECT.appspot.com",
+    messagingSenderId: "JOUW_SENDER_ID",
+    appId: "JOUW_APP_ID"
+  };
+
+  let db = null;
+  try {
+    const app = initializeApp(firebaseConfig);
+    db = getFirestore(app);
+
+    // Live luisteren naar state updates
+    onSnapshot(doc(db, 'trip', 'state'), (snap) => {
+      if (snap.exists()) {
+        const remote = snap.data();
+        // Merge remote stops/polls/players in lokale state
+        if (remote.stops) state.stops = remote.stops;
+        if (remote.polls) state.polls = remote.polls;
+        if (remote.players) {
+          // Merge players zodat lokale punten niet overschreven worden
+          Object.entries(remote.players).forEach(([name, data]) => {
+            if (name !== userName) state.players[name] = data;
+          });
+        }
+        renderTimeline();
+        renderPolls();
+        renderScore();
+      }
+    });
+  } catch(e) {
+    console.log('Firebase niet geconfigureerd, werkt lokaal:', e.message);
+  }
+
+  // Exporteer sync functie naar globale scope
+  window.syncToFirebase = async () => {
+    if (!db) return;
+    try {
+      await setDoc(doc(db, 'trip', 'state'), {
+        stops: state.stops,
+        polls: state.polls,
+        players: state.players,
+        lastUpdate: new Date().toISOString()
+      });
+    } catch(e) {
+      console.log('Firebase sync error:', e.message);
+    }
+  };
+</script>
+
+<script>
+// ══════════════════════════════════════
+// STATE — geladen uit localStorage
+// ══════════════════════════════════════
+let lang = localStorage.getItem('ht-lang') || 'nl';
+let userName = localStorage.getItem('ht-user') || '';
+let newStopStatus = 'current';
+
+const DEFAULT_STATE = {
+  stops: [],
+  polls: [
+    { id: 1, icon: '🍽️', q_nl: 'Waar gaan we vanavond eten?', q_fr: 'Où mange-t-on ce soir ?',
+      options: ['Franklin Barbecue', "Stubb's BBQ", 'La Condesa'],
+      votes: [0, 0, 0], voted: false, winner: null, firstVoter: null, closesAt: null },
+    { id: 2, icon: '🐴', q_nl: 'Wie wint de rodeo?', q_fr: 'Qui gagne le rodéo ?',
+      options: ['Buck Williams', 'Jesse Ray', 'Dusty Torres'],
+      votes: [0, 0, 0], voted: false, winner: null, firstVoter: null, closesAt: null }
+  ],
+  players: {}
+};
+
+let state = JSON.parse(localStorage.getItem('ht-state') || 'null') || DEFAULT_STATE;
+
+function saveState() {
+  localStorage.setItem('ht-state', JSON.stringify(state));
+  if (window.syncToFirebase) window.syncToFirebase();
+}
+
+// ══════════════════════════════════════
+// BADGES
+// ══════════════════════════════════════
+const BADGE_DEFS = [
+  { id: 'first_vote',    icon: '🗳️', name: { nl: 'Eerste stem',    fr: 'Premier vote'     }, desc: { nl: 'Jij stemde als eerste op een poll!',  fr: 'Tu as voté en premier !' },              check: p => p.votes >= 1 },
+  { id: 'sharp_shooter', icon: '🎯', name: { nl: 'Scherpschutter', fr: 'Tireur d\'élite'  }, desc: { nl: 'Raad 3 polls correct',                fr: 'Devine 3 sondages correctement' },        check: p => p.correct >= 3 },
+  { id: 'superfan',      icon: '⭐', name: { nl: 'Superfan',       fr: 'Superfan'         }, desc: { nl: 'Stem op alle polls',                  fr: 'Vote sur tous les sondages' },            check: (p, s) => s.polls.length > 0 && p.votes >= s.polls.length },
+  { id: 'commenter',     icon: '💬', name: { nl: 'Berichtje!',     fr: 'Commentateur'     }, desc: { nl: 'Plak je eerste reactie op een stop',  fr: 'Colle ta première réaction' },            check: p => p.reactions >= 1 },
+  { id: 'early_bird',    icon: '🐓', name: { nl: 'Vroege vogel',   fr: 'Lève-tôt'        }, desc: { nl: 'Open de app als eerste',              fr: 'Ouvre l\'app en premier' },               check: p => p.earlyBird >= 1 },
+  { id: 'top_scorer',    icon: '🏆', name: { nl: 'Topscorer',      fr: 'Meilleur score'   }, desc: { nl: 'Sta eerste in het klassement',        fr: 'Sois premier au classement' },            check: (p, s) => { const sorted = Object.entries(s.players).sort((a,b)=>b[1].pts-a[1].pts); return sorted[0] && sorted[0][0] === userName; } },
+  { id: 'lucky',         icon: '🍀', name: { nl: 'Lucky Shot',     fr: 'Coup de chance'   }, desc: { nl: 'Win een poll met 1 stem verschil',    fr: 'Gagne avec 1 vote d\'écart' },            check: p => p.luckyShot >= 1 },
+  { id: 'collector',     icon: '🎖️', name: { nl: 'Verzamelaar',    fr: 'Collectionneur'   }, desc: { nl: 'Verdien 5 andere badges',             fr: 'Gagne 5 autres badges' },                 check: p => p.badgeCount >= 5 },
+];
+
+const EMOJIS = ['❤️','😂','😮','🔥','🤠','👍','😍','🎉','😢','✨'];
+const POSTIT_COLORS = ['postit-yellow','postit-pink','postit-blue','postit-green','postit-orange'];
+const STICKER_COLORS = ['#FFB3BA','#FFD9A0','#FFFACC','#B5EAD7','#C7CEEA','#F2C6DE'];
+const AVATAR_COLORS = ['#C0272D','#1B2A4A','#2a7a4a','#B8860B','#7B2D8B','#1565C0'];
+const TAPE_ROTS = [-3,-1,0,2,4,-2,3,-4,1];
+const DIARY_ROTS = [-2,-1,0,1,2];
+const TAPE_COLORS = ['rgba(192,39,45,0.3)','rgba(27,42,74,0.2)','rgba(180,140,30,0.3)'];
+
+const CS = {}; // carousel state
+const selEm = {}, selSt = {};
+
+function getOrCreatePlayer(name) {
+  if (!state.players[name]) state.players[name] = { pts:0, votes:0, correct:0, reactions:0, earlyBird:0, luckyShot:0, badgeCount:0, earnedBadges:[] };
+  return state.players[name];
+}
+
+function computeBadges(name) {
+  const p = state.players[name]; if (!p) return [];
+  const earned = BADGE_DEFS.filter(b => b.check(p, state)).map(b => b.id);
+  p.badgeCount = earned.length; p.earnedBadges = earned;
+  return earned;
+}
+
+function checkBadges(name, silent = false) {
+  const before = (state.players[name]?.earnedBadges || []).slice();
+  const after = computeBadges(name);
+  if (!silent) after.filter(id => !before.includes(id)).forEach(id => {
+    const b = BADGE_DEFS.find(x => x.id === id);
+    if (b) showToast(`${b.icon} Badge: ${b.name[lang]}!`);
+  });
+  return after;
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// ══════════════════════════════════════
+// ONBOARDING
+// ══════════════════════════════════════
+function obLang(l) {
+  lang = l; localStorage.setItem('ht-lang', l);
+  document.getElementById('ob-nl').className = 'ob-lang-btn' + (l==='nl'?' active':'');
+  document.getElementById('ob-fr').className = 'ob-lang-btn' + (l==='fr'?' active':'');
+  document.getElementById('ob-sub').innerHTML = l === 'fr'
+    ? 'Suis notre roadtrip, vote et gagne des points !<br>Volg onze roadtrip live, stem mee en win punten!'
+    : 'Volg onze roadtrip live, stem mee en win punten!<br>Suis notre roadtrip, vote et gagne des points !';
+  document.getElementById('ob-label').textContent = l === 'fr' ? 'Ton prénom' : 'Jouw naam';
+  document.getElementById('ob-name').placeholder = l === 'fr' ? 'ex. Sophie...' : 'bijv. Sofie...';
+  document.getElementById('ob-btn').textContent = l === 'fr' ? "➜ C'est parti !" : '➜ Laten we gaan!';
+}
+
+function completeOnboard() {
+  const n = document.getElementById('ob-name').value.trim();
+  if (!n) { document.getElementById('ob-name').focus(); return; }
+  userName = n; localStorage.setItem('ht-user', n);
+  const p = getOrCreatePlayer(n); p.earlyBird = 1;
+  document.getElementById('onboard').style.display = 'none';
+  document.getElementById('main-app').style.display = 'flex';
+  document.getElementById('main-app').style.flexDirection = 'column';
+  document.getElementById('user-display').textContent = n;
+  document.getElementById('share-url').textContent = window.location.href;
+  checkBadges(n, true);
+  saveState();
+  applyLang(); renderTimeline(); renderPolls(); renderScore();
+}
+
+window.addEventListener('load', () => {
+  obLang(lang);
+  if (userName) {
+    document.getElementById('ob-name').value = userName;
+    completeOnboard();
+  }
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js').then(reg => {
+      window._swReg = reg;
+      checkPushStatus();
+    }).catch(() => {});
+  }
+});
+
+// ══════════════════════════════════════
+// TAAL
+// ══════════════════════════════════════
+function setLang(l) {
+  lang = l; localStorage.setItem('ht-lang', l);
+  document.getElementById('btn-nl').className = 'lang-btn' + (l==='nl'?' active':'');
+  document.getElementById('btn-fr').className = 'lang-btn' + (l==='fr'?' active':'');
+  applyLang(); renderTimeline(); renderPolls(); renderScore(); renderBadges();
+}
+
+function applyLang() {
+  document.querySelectorAll('[data-nl]').forEach(el => {
+    const t = el.getAttribute('data-' + lang); if (t) el.textContent = t;
+  });
+  document.getElementById('topbar-sub').textContent = lang === 'fr' ? 'En direct du Texas' : 'Live vanuit Texas';
+}
+
+// ══════════════════════════════════════
+// TABS
+// ══════════════════════════════════════
+function switchTab(name, el) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('section-' + name).classList.add('active');
+  el.classList.add('active');
+  if (name === 'polls') renderPolls();
+  if (name === 'score') renderScore();
+  if (name === 'badges') renderBadges();
+}
+
+// ══════════════════════════════════════
+// DAGBOEK / TIJDLIJN
+// ══════════════════════════════════════
+function selStatus(s) {
+  newStopStatus = s;
+  ['v','c','p'].forEach((k,i) => {
+    const btn = document.getElementById('sb-'+k);
+    btn.classList.toggle('active-status', ['visited','current','planned'][i] === s);
+  });
+}
+
+function showAddStop() {
+  document.getElementById('add-stop-form').style.display = 'block';
+  document.getElementById('add-stop-btn').style.display = 'none';
+  document.getElementById('s-date').value = new Date().toISOString().split('T')[0];
+}
+function hideAddStop() {
+  document.getElementById('add-stop-form').style.display = 'none';
+  document.getElementById('add-stop-btn').style.display = 'flex';
+}
+
+function submitStop() {
+  const name = document.getElementById('s-name').value.trim(); if (!name) return;
+  const photos = (document.getElementById('s-photos').value || '').split('\n').map(u => u.trim()).filter(Boolean);
+  const stop = {
+    name_nl: name, name_fr: name,
+    date: document.getElementById('s-date').value,
+    desc_nl: document.getElementById('s-desc').value.trim(),
+    desc_fr: document.getElementById('s-desc').value.trim(),
+    photos, status: newStopStatus, reactions: []
+  };
+  state.stops.push(stop);
+  ['s-name','s-desc','s-photos'].forEach(id => document.getElementById(id).value = '');
+  hideAddStop();
+  addNotif(lang === 'fr' ? `Nouvelle étape: ${name}` : `Nieuwe stop: ${name}`);
+  sendPush(lang === 'fr' ? '📍 Nouvelle étape!' : '📍 Nieuwe stop!', name);
+  saveState(); renderTimeline();
+}
+
+function addPhotoToStop(idx) {
+  const url = prompt(lang === 'fr' ? 'Collez une URL de photo:' : 'Plak een foto-URL:');
+  if (!url) return;
+  state.stops[idx].photos.push(url);
+  saveState(); renderTimeline();
+  setTimeout(() => carouselTo(idx, state.stops[idx].photos.length - 1), 50);
+}
+
+// ── CAROUSEL ──
+function getCS(i) { if (!CS[i]) CS[i] = { cur: 0 }; return CS[i]; }
+
+function carouselTo(i, idx) {
+  const s = state.stops[i]; const total = (s.photos||[]).length + 1;
+  const cs = getCS(i); cs.cur = Math.max(0, Math.min(idx, total - 1));
+  const t = document.getElementById('ct-' + i); if (t) t.style.transform = `translateX(-${cs.cur * 100}%)`;
+  const prev = document.getElementById('cprev-' + i); if (prev) prev.disabled = cs.cur === 0;
+  const next = document.getElementById('cnext-' + i); if (next) next.disabled = cs.cur === total - 1;
+  document.querySelectorAll(`[data-dot="${i}"]`).forEach((d, di) => d.classList.toggle('active', di === cs.cur));
+  const cnt = document.getElementById('ccount-' + i);
+  if (cnt) cnt.textContent = cs.cur < total - 1 ? `${cs.cur + 1}/${total - 1}` : '';
+}
+
+const TS = {};
+function onTouchStart(e, i) { TS[i] = { x: e.touches[0].clientX }; }
+function onTouchEnd(e, i) {
+  if (!TS[i]) return;
+  const dx = e.changedTouches[0].clientX - TS[i].x;
+  if (Math.abs(dx) > 40) carouselTo(i, dx < 0 ? getCS(i).cur + 1 : getCS(i).cur - 1);
+  delete TS[i];
+}
+
+function buildCarousel(stop, si, rot) {
+  const photos = stop.photos || []; const cs = getCS(si); const total = photos.length + 1;
+  const slides = photos.map((url, pi) => `
+    <div class="carousel-slide">
+      <div class="carousel-polaroid" style="transform:rotate(${rot * 0.3}deg);">
+        <img src="${url}" alt="foto ${pi+1}" loading="lazy" />
+        <div class="carousel-caption">${lang==='fr'?stop.name_fr:stop.name_nl} · ${pi+1}/${photos.length} 📸</div>
+      </div>
+    </div>`).join('');
+  const addSlide = `
+    <div class="carousel-slide">
+      <div class="carousel-empty">
+        <div class="carousel-add" onclick="addPhotoToStop(${si})">
+          <span style="font-size:28px;">📷</span>
+          <span>${lang==='fr'?'Ajouter une photo':'Foto toevoegen'}</span>
+          ${photos.length > 0 ? `<span style="font-size:11px;color:#8a8a8a;">(${photos.length} foto${photos.length!==1?'s':''} al toegevoegd)</span>` : ''}
+        </div>
+      </div>
+    </div>`;
+  const dots = Array.from({length: total}, (_, i) =>
+    `<button class="carousel-dot ${i===cs.cur?'active':''}" data-dot="${si}" onclick="carouselTo(${si},${i})"></button>`
+  ).join('');
+  return `<div class="carousel-wrap">
+    ${photos.length > 0 ? `<div class="carousel-counter" id="ccount-${si}">${cs.cur < total-1 ? `${cs.cur+1}/${photos.length}` : ''}</div>` : ''}
+    <div class="carousel-track-outer" ontouchstart="onTouchStart(event,${si})" ontouchend="onTouchEnd(event,${si})">
+      <div class="carousel-track" id="ct-${si}" style="transform:translateX(-${cs.cur*100}%)">${slides}${addSlide}</div>
+    </div>
+    ${photos.length > 0 ? `
+      <button class="carousel-btn prev" id="cprev-${si}" onclick="carouselTo(${si},${cs.cur}-1)" ${cs.cur===0?'disabled':''}>‹</button>
+      <button class="carousel-btn next" id="cnext-${si}" onclick="carouselTo(${si},${cs.cur}+1)" ${cs.cur===total-1?'disabled':''}>›</button>
+    ` : ''}
+    <div class="carousel-dots">${dots}</div>
+  </div>`;
+}
+
+// ── REACTIES ──
+function selectEmoji(i, e, el) {
+  selEm[i] = e;
+  el.closest('.emoji-picker').querySelectorAll('.emoji-opt').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+}
+function selectStyle(i, s, el) {
+  selSt[i] = s;
+  el.closest('.style-picker').querySelectorAll('.style-opt').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+}
+function toggleRF(i) {
+  const f = document.getElementById('rf-' + i);
+  if (f) f.style.display = f.style.display === 'none' ? 'block' : 'none';
+}
+function submitReaction(i) {
+  const emoji = selEm[i] || '❤️';
+  const text = document.getElementById('rt-' + i).value.trim();
+  const style = selSt[i] || 'postit';
+  if (!text) return;
+  const rots = [-4,-2,0,2,4,3,-3,1,-1];
+  state.stops[i].reactions.push({
+    emoji, text, author: userName, style,
+    color: state.stops[i].reactions.length % 6,
+    rot: rots[state.stops[i].reactions.length % rots.length]
+  });
+  const p = getOrCreatePlayer(userName); p.reactions++; p.pts += 1;
+  document.getElementById('rt-' + i).value = '';
+  selEm[i] = null;
+  checkBadges(userName);
+  saveState(); renderTimeline(); renderScore();
+}
+
+function renderReaction(r) {
+  const rot = `rotate(${r.rot||0}deg)`;
+  if (r.style === 'tape') return `<div class="reaction-tape" style="transform:${rot};">${r.emoji} ${r.text}<div style="font-size:10px;color:rgba(60,50,0,0.5);margin-top:2px;font-style:italic;">— ${r.author}</div></div>`;
+  if (r.style === 'sticker') return `<div class="reaction-sticker" style="transform:${rot};"><div class="sticker-circle" style="background:${STICKER_COLORS[r.color%STICKER_COLORS.length]};">${r.emoji}</div><div style="font-size:11px;line-height:1.3;">${r.text}</div><div style="font-size:10px;color:#8a8a8a;font-style:italic;">— ${r.author}</div></div>`;
+  return `<div class="reaction-postit ${POSTIT_COLORS[r.color%POSTIT_COLORS.length]}" style="transform:${rot};"><span style="font-size:16px;display:block;margin-bottom:2px;">${r.emoji}</span>${r.text}<div style="font-size:10px;color:rgba(0,0,0,0.4);margin-top:3px;text-align:right;font-style:italic;">— ${r.author}</div></div>`;
+}
+
+function renderTimeline() {
+  const c = document.getElementById('timeline');
+  const order = { current: 0, visited: 1, planned: 2 };
+  const sorted = [...state.stops].map((s,i) => ({...s, _idx: i})).sort((a,b) => {
+    if (order[a.status] !== order[b.status]) return order[a.status] - order[b.status];
+    return new Date(b.date) - new Date(a.date);
+  });
+  const sl = {
+    visited: { nl: 'Bezocht ✓', fr: 'Visité ✓' },
+    current: { nl: 'Nu hier 📍', fr: 'Ici 📍' },
+    planned: { nl: 'Gepland', fr: 'Prévu' }
+  };
+
+  if (sorted.length === 0) {
+    c.innerHTML = `<div style="text-align:center;font-family:'Caveat',cursive;font-size:16px;color:#c0c8d8;padding:30px;">${lang==='fr'?'Ajoutez votre première étape !':'Voeg je eerste stop toe!'}</div>`;
+    return;
+  }
+
+  let html = '';
+  sorted.forEach((s, i) => {
+    const isLast = i === sorted.length - 1;
+    const ri = s._idx;
+    const name = lang === 'fr' ? s.name_fr : s.name_nl;
+    const desc = lang === 'fr' ? s.desc_fr : s.desc_nl;
+    const dateStr = s.date ? new Date(s.date + 'T12:00:00').toLocaleDateString(
+      lang === 'fr' ? 'fr-BE' : 'nl-BE',
+      { weekday: 'long', day: 'numeric', month: 'long' }
+    ) : '';
+    const rot = DIARY_ROTS[i % DIARY_ROTS.length];
+    const tc = TAPE_COLORS[i % TAPE_COLORS.length];
+    const emojiPickerHtml = EMOJIS.map(e => `<button class="emoji-opt" onclick="selectEmoji(${ri},'${e}',this)">${e}</button>`).join('');
+    const reactionsHtml = s.reactions.map(r => renderReaction(r)).join('');
+
+    html += `<div style="display:flex;gap:14px;">
+      <div class="tl-spine">
+        <div class="tl-dot ${s.status}"></div>
+        ${!isLast ? `<div class="tl-line ${s.status==='visited'?'visited':''}"></div>` : ''}
+      </div>
+      <div style="flex:1;margin-bottom:18px;">
+        <div class="diary-card" style="transform:rotate(${rot}deg);">
+          <div style="position:absolute;top:-9px;left:${22+i*11}px;width:55px;height:16px;background:${tc};border-radius:1px;transform:rotate(${-rot*0.5}deg);"></div>
+          <div class="diary-inner">
+            <div class="diary-date">${dateStr}</div>
+            <div class="diary-city">${name}</div>
+            <span class="diary-badge ${s.status}">${sl[s.status][lang]}</span>
+            ${desc ? `<div class="diary-text">${desc}</div>` : ''}
+            ${buildCarousel(s, ri, rot)}
+            ${reactionsHtml ? `<div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;">${reactionsHtml}</div>` : ''}
+            ${s.status !== 'planned' ? `
+            <button class="react-btn" onclick="toggleRF(${ri})">
+              💬 ${s.reactions.length > 0 ? s.reactions.length + (lang==='fr'?' réactions ＋':' reacties ＋') : (lang==='fr'?'Réagir':'Reageer')}
+            </button>
+            <div id="rf-${ri}" style="display:none;background:#fffdf7;border:1.5px solid #C0272D;border-radius:8px;padding:12px;margin-top:8px;">
+              <div style="font-family:'Caveat',cursive;font-size:13px;color:#C0272D;margin-bottom:6px;">${lang==='fr'?'Style:':'Stijl:'}</div>
+              <div class="style-picker">
+                <button class="style-opt selected" onclick="selectStyle(${ri},'postit',this)">📝 Post-it</button>
+                <button class="style-opt" onclick="selectStyle(${ri},'tape',this)">🩹 Tape</button>
+                <button class="style-opt" onclick="selectStyle(${ri},'sticker',this)">⭐ Sticker</button>
+              </div>
+              <div style="font-family:'Caveat',cursive;font-size:13px;color:#C0272D;margin-bottom:6px;">Emoji:</div>
+              <div class="emoji-picker">${emojiPickerHtml}</div>
+              <input id="rt-${ri}" style="width:100%;padding:7px 10px;font-size:14px;background:transparent;border:none;border-bottom:1.5px solid #c0c8d8;color:#1B2A4A;outline:none;font-family:'Caveat',cursive;margin-bottom:10px;" maxlength="60" placeholder="${lang==='fr'?'Écris quelque chose...':'Schrijf iets...'}" />
+              <div style="display:flex;gap:8px;">
+                <button class="btn-ghost" onclick="toggleRF(${ri})">✕</button>
+                <button class="btn-red" onclick="submitReaction(${ri})" style="flex:1;">📌 ${lang==='fr'?'Coller !':'Plakken!'}</button>
+              </div>
+            </div>` : ''}
+          </div>
+        </div>
+      </div>
+    </div>`;
+  });
+  c.innerHTML = html;
+  sorted.forEach((_, ri) => { if (!selSt[ri]) selSt[ri] = 'postit'; });
+}
+
+// ══════════════════════════════════════
+// POLLS
+// ══════════════════════════════════════
+function renderPolls() {
+  const c = document.getElementById('polls-container'); c.innerHTML = '';
+  state.polls.forEach(poll => {
+    const total = poll.votes.reduce((a,b) => a+b, 0);
+    const maxV = Math.max(...poll.votes);
+    const q = lang === 'fr' ? poll.q_fr : poll.q_nl;
+
+    // Timer berekenen
+    let timerHtml = '';
+    if (poll.closesAt && !poll.voted) {
+      const remaining = new Date(poll.closesAt) - new Date();
+      if (remaining > 0) {
+        const hrs = Math.floor(remaining / 3600000);
+        const mins = Math.floor((remaining % 3600000) / 60000);
+        const urgent = hrs < 1;
+        timerHtml = `<div class="poll-timer ${urgent?'urgent':''}">⏱️ ${lang==='fr'?'Ferme dans':'Sluit over'} ${hrs > 0 ? hrs+'u ' : ''}${mins}min</div>`;
+      } else {
+        timerHtml = `<div class="poll-timer urgent">🔒 ${lang==='fr'?'Fermé':'Gesloten'}</div>`;
+      }
+    }
+
+    const opts = poll.options.map((opt, i) => {
+      const pct = total > 0 ? Math.round(poll.votes[i] / total * 100) : 0;
+      const isW = poll.voted && poll.votes[i] === maxV;
+      const closed = poll.closesAt && new Date(poll.closesAt) < new Date();
+      return `<button class="poll-btn ${poll.voted||closed?'voted':''} ${poll.winner===i?'selected':''}"
+        ${(poll.voted||closed) ? '' : `onclick="vote(${poll.id},${i})"`}>
+        <div class="poll-bar" style="width:${poll.voted?pct:0}%"></div>
+        <span class="poll-label">${opt}</span>
+        <span class="poll-pct ${isW?'winner':''}">${poll.voted?(isW?'🏆 ':'')+pct+'%':''}</span>
+      </button>`;
+    }).join('');
+
+    const div = document.createElement('div');
+    div.className = 'poll-card';
+    div.innerHTML = `
+      <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:12px;">
+        <div style="width:36px;height:36px;border-radius:50%;background:#C0272D;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">${poll.icon}</div>
+        <div class="poll-q">${q}</div>
+      </div>
+      ${opts}
+      ${timerHtml}`;
+    c.appendChild(div);
+  });
+}
+
+function vote(pollId, optIdx) {
+  const poll = state.polls.find(p => p.id === pollId); if (!poll || poll.voted) return;
+  if (poll.closesAt && new Date(poll.closesAt) < new Date()) { showToast(lang==='fr'?'Sondage fermé!':'Poll gesloten!'); return; }
+  const p = getOrCreatePlayer(userName);
+  const isFirst = !poll.firstVoter;
+  poll.votes[optIdx]++; poll.voted = true; poll.winner = optIdx; poll.firstVoter = userName;
+  p.votes++;
+  const maxV = Math.max(...poll.votes);
+  const isCorrect = poll.votes[optIdx] === maxV;
+  if (isCorrect) { p.pts += 2; p.correct++; }
+  if (isFirst) { p.pts += 1; showToast('⚡ ' + (lang==='fr'?'Premier votant! +1 bonus':'Eerste stemmer! +1 bonus')); }
+  const sorted = [...poll.votes].sort((a,b) => b-a);
+  if (isCorrect && sorted[0] - sorted[1] <= 1) { p.luckyShot++; showToast('🍀 Lucky Shot!'); }
+  checkBadges(userName);
+  saveState(); renderPolls(); renderScore();
+}
+
+function showCreatePoll() { document.getElementById('create-poll-form').style.display='block'; document.getElementById('new-poll-btn').style.display='none'; }
+function hideCreatePoll() { document.getElementById('create-poll-form').style.display='none'; document.getElementById('new-poll-btn').style.display='flex'; }
+function addOptInput() {
+  const c = document.getElementById('poll-opts');
+  const d = document.createElement('div'); d.className = 'option-row';
+  d.innerHTML = `<input class="wi poll-opt" placeholder="Optie ${c.children.length+1}..." /><button class="remove-opt" onclick="removeOpt(this)">×</button>`;
+  c.appendChild(d);
+}
+function removeOpt(btn) { if (document.querySelectorAll('.poll-opt').length > 2) btn.closest('.option-row').remove(); }
+
+function submitPoll() {
+  const qNl = document.getElementById('poll-q-nl').value.trim();
+  const qFr = document.getElementById('poll-q-fr').value.trim();
+  const opts = [...document.querySelectorAll('.poll-opt')].map(i => i.value.trim()).filter(Boolean);
+  if (!qNl || opts.length < 2) return;
+  const hours = parseInt(document.getElementById('poll-hours').value);
+  const closesAt = hours > 0 ? new Date(Date.now() + hours * 3600000).toISOString() : null;
+  const icons = ['⭐','📍','🤠','🎵','📷','🔥','🌮','🐴','🎪','🎸'];
+  state.polls.push({
+    id: Date.now(), icon: icons[Math.floor(Math.random()*icons.length)],
+    q_nl: qNl, q_fr: qFr || qNl,
+    options: opts, votes: opts.map(() => 0),
+    voted: false, winner: null, firstVoter: null, closesAt
+  });
+  addNotif(lang === 'fr' ? `Nouveau sondage: ${qFr||qNl}` : `Nieuwe poll: ${qNl}`);
+  sendPush(lang === 'fr' ? '📊 Nouveau sondage!' : '📊 Nieuwe poll!', qNl);
+  ['poll-q-nl','poll-q-fr','poll-hours'].forEach(id => document.getElementById(id).value = '');
+  document.querySelectorAll('.poll-opt').forEach(i => i.value = '');
+  hideCreatePoll(); saveState(); renderPolls();
+}
+
+// ══════════════════════════════════════
+// SCORE
+// ══════════════════════════════════════
+function renderScore() {
+  const p = state.players[userName]; const myPts = p?.pts || 0;
+  const allPlayers = Object.entries(state.players).sort((a,b) => b[1].pts - a[1].pts);
+  const myRank = allPlayers.findIndex(([n]) => n === userName) + 1;
+  const LEVELS = [
+    { name: { nl:'Toerist',   fr:'Touriste'  }, min:0,  max:5   },
+    { name: { nl:'Cowboy',    fr:'Cowboy'    }, min:5,  max:12  },
+    { name: { nl:'Ranger',    fr:'Ranger'    }, min:12, max:20  },
+    { name: { nl:'Legende',   fr:'Légende'   }, min:20, max:999 }
+  ];
+  const level = LEVELS.find(l => myPts >= l.min && myPts < l.max) || LEVELS[LEVELS.length-1];
+  const pct = level.max === 999 ? 100 : Math.min(100, Math.round((myPts - level.min) / (level.max - level.min) * 100));
+  const earnedBadges = (p?.earnedBadges || []).map(id => BADGE_DEFS.find(b => b.id === id)).filter(Boolean);
+
+  document.getElementById('score-hero').innerHTML = `
+    <div class="score-hero">
+      <div class="score-pts">${myPts}</div>
+      <div style="font-family:'Caveat',cursive;font-size:16px;color:#a0b0c8;margin-top:2px;">${lang==='fr'?'points':'punten'}</div>
+      <div class="score-rank-pill">#${myRank} · ${level.name[lang]}</div>
+      <div class="level-bar-bg"><div class="level-bar-fill" style="width:${pct}%"></div></div>
+      <div style="display:flex;justify-content:space-between;font-family:'Caveat',cursive;font-size:12px;color:#a0b0c8;">
+        <span>${level.name[lang]}</span><span>${level.max===999?'MAX':level.max+' pt'}</span>
+      </div>
+      ${earnedBadges.length > 0 ? `<div style="margin-top:10px;font-size:22px;letter-spacing:4px;">${earnedBadges.map(b=>b.icon).join('')}</div>` : ''}
+    </div>`;
+
+  document.getElementById('scoreboard').innerHTML = allPlayers.length
+    ? allPlayers.map(([name, data], i) => {
+        const medals = ['🥇','🥈','🥉'];
+        const ac = AVATAR_COLORS[Object.keys(state.players).indexOf(name) % AVATAR_COLORS.length];
+        const badges = (data.earnedBadges||[]).map(id => BADGE_DEFS.find(b=>b.id===id)?.icon||'').join('');
+        return `<div class="rank-row ${name===userName?'me':''}">
+          <div style="font-size:20px;width:28px;text-align:center;">${medals[i]||''}</div>
+          <div class="rank-avatar" style="background:${ac};">${name[0].toUpperCase()}</div>
+          <div style="flex:1;">
+            <div style="font-size:14px;font-weight:600;color:#1B2A4A;font-family:'Lora',serif;">${name}${name===userName?' 👈':''}</div>
+            <div style="font-size:11px;color:#5a6a7a;font-family:'Caveat',cursive;">${badges||(lang==='fr'?'pas encore de badges':'nog geen badges')}</div>
+          </div>
+          <div style="font-family:'Playfair Display',serif;font-size:16px;font-weight:800;color:#C0272D;">${data.pts} pt</div>
+        </div>`;
+      }).join('')
+    : `<div style="font-size:13px;color:#5a6a7a;padding:8px 0;font-style:italic;">${lang==='fr'?'Personne n\'a encore voté.':'Nog niemand gestemd.'}</div>`;
+}
+
+// ══════════════════════════════════════
+// BADGES
+// ══════════════════════════════════════
+function renderBadges() {
+  const earned = computeBadges(userName);
+  document.getElementById('badges-sub').textContent =
+    `${earned.length} ${lang==='fr'?'sur':'van'} ${BADGE_DEFS.length} badges ${lang==='fr'?'gagnés':'verdiend'}`;
+  document.getElementById('badges-grid').innerHTML = BADGE_DEFS.map(b => {
+    const isEarned = earned.includes(b.id);
+    return `<div class="badge-card ${isEarned?'earned':'locked'}">
+      ${isEarned ? '<div class="badge-earned-tag">✓</div>' : ''}
+      <span class="badge-icon">${b.icon}</span>
+      <div class="badge-name">${b.name[lang]}</div>
+      <div class="badge-desc">${b.desc[lang]}</div>
+    </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════
+// NOTIFICATIES & DELEN
+// ══════════════════════════════════════
+function addNotif(text) {
+  const log = document.getElementById('notif-log');
+  const d = document.createElement('div'); d.className = 'notif-row';
+  d.innerHTML = `<div class="notif-dot"></div><div><div style="font-size:13px;color:#1B2A4A;font-family:'Lora',serif;">${text}</div><div style="font-family:'Caveat',cursive;font-size:13px;color:#5a6a7a;">${new Date().toLocaleTimeString(lang==='fr'?'fr-BE':'nl-BE',{hour:'2-digit',minute:'2-digit'})}</div></div>`;
+  log.prepend(d);
+}
+
+async function askPush() {
+  if (!('Notification' in window)) { showToast(lang==='fr'?'Non supporté':'Niet ondersteund'); return; }
+  const perm = await Notification.requestPermission();
+  if (perm === 'granted') {
+    localStorage.setItem('ht-push', 'granted');
+    document.getElementById('push-wrap').innerHTML = `<div style="background:#e8f5ee;border:1.5px solid #2a7a4a;border-radius:10px;padding:12px;margin-bottom:12px;font-family:'Caveat',cursive;font-size:15px;color:#2a7a4a;">✅ ${lang==='fr'?'Vous recevrez des alertes!':'Je ontvangt meldingen!'}</div>`;
+    if (window._swReg) {
+      window._swReg.showNotification('🤠 J★L Howdy Texas!', {
+        body: lang==='fr'?'Vous recevrez des alertes pour les nouvelles étapes et sondages!':'Je krijgt meldingen bij nieuwe stops en polls!',
+        icon: '/icon-192.png', vibrate: [200,100,200]
+      });
+    }
+  }
+}
+
+function checkPushStatus() {
+  if (localStorage.getItem('ht-push') === 'granted' && Notification.permission === 'granted') {
+    document.getElementById('push-wrap').innerHTML = `<div style="background:#e8f5ee;border:1.5px solid #2a7a4a;border-radius:10px;padding:12px;margin-bottom:12px;font-family:'Caveat',cursive;font-size:15px;color:#2a7a4a;">✅ ${lang==='fr'?'Alertes activées':'Meldingen actief'}</div>`;
+  }
+}
+
+function sendPush(title, body) {
+  if (window._swReg && Notification.permission === 'granted') {
+    window._swReg.showNotification(title, {
+      body, icon: '/icon-192.png', badge: '/icon-192.png',
+      vibrate: [200,100,200], tag: 'howdy-' + Date.now()
+    });
+  }
+}
+
+function copyLink(btn) {
+  navigator.clipboard.writeText(window.location.href).catch(() => {});
+  const orig = btn.innerHTML;
+  btn.innerHTML = lang === 'fr' ? '✓ Copié!' : '✓ Gekopieerd!';
+  setTimeout(() => btn.innerHTML = orig, 2000);
+}
+
+function shareApp() {
+  const url = window.location.href;
+  const text = lang === 'fr'
+    ? `🤠 Suis notre roadtrip J★L au Texas ! Vote et gagne des points !\n${url}`
+    : `🤠 Volg onze J★L Texas roadtrip live! Stem mee en win punten!\n${url}`;
+  if (navigator.share) { navigator.share({ title: 'J★L Howdy Texas!', text, url }); }
+  else { window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank'); }
+}
+
+// Poll timer refresh elke minuut
+setInterval(() => {
+  const pollsSection = document.getElementById('section-polls');
+  if (pollsSection && pollsSection.classList.contains('active')) renderPolls();
+}, 60000);
+
+</script>
+</body>
+</html>
